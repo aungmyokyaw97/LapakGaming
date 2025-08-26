@@ -1,0 +1,58 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Composer
+composer.lock
+composer.phar
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log
+logs/
+
+# Cache files
+.cache/
+*.cache
+
+# Testing
+.phpunit.result.cache
+coverage/
+.coverage
+phpunit.xml.dist
+
+# Build files
+build/
+dist/
+
+# Temporary files
+tmp/
+temp/
+
+# Documentation build files (exclude generated docs)
+docs/_build/
+docs/build/
+site/
+
+API_REFERENCE.md
+DOCUMENTATION.md

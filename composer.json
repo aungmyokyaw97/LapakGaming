@@ -1,0 +1,34 @@
+{
+    "name": "aungmyokyaw/lapakgaming",
+    "type": "library",
+    "keywords": ["laravel", "lapakgaming", "gaming", "topup", "reseller"],
+    "license": "MIT",
+    "description": "Laravel package for LapakGaming Reseller API integration",
+    "require": {
+        "php": "^7.4|^8.0|^8.1|^8.2|^8.3",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Amk\\LapakGaming\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Amk\\LapakGaming\\Provider\\LapakGamingServiceProvider"
+            ],
+            "aliases": {
+                "LapakGaming": "Amk\\LapakGaming\\Facades\\LapakGaming"
+            }
+        }
+    },
+    "authors": [
+        {
+            "name": "Aung Myo Kyaw",
+            "email": "amk01.dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
