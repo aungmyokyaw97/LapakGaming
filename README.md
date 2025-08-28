@@ -74,12 +74,12 @@ $balance = LapakGaming::getBalance();
 #### Basic Order (using product_code)
 ```php
 // Quantity defaults to 1 if not specified
-$order = LapakGaming::setProduct('ML78_8-S2', 15000)
+$order = LapakGaming::setProduct('ML78_8-S2')
                    ->setUser('123456789', '2345', 'username123')
                    ->createOrder();
 
 // Or explicitly set quantity
-$order = LapakGaming::setProduct('ML78_8-S2', 15000)
+$order = LapakGaming::setProduct('ML78_8-S2')
                    ->setUser('123456789', '2345', 'username123')
                    ->setQuantity(2)
                    ->createOrder();
