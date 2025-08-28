@@ -2,6 +2,21 @@
 
 Laravel package for [LapakGaming](https://www.lapakgaming.com/) Reseller API integration.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage Examples](#usage-examples)
+  - [Get Categories](#get-categories)
+  - [Get Products](#get-products)
+  - [Get All Products](#get-all-products)
+  - [Get Best Products](#get-best-products)
+  - [Get Balance](#get-balance)
+  - [Order](#order)
+  - [Order Status](#order-status)
+- [Supported Country Codes](#supported-country-codes)
+- [License](#license)
+
 ## About
 
 This package provides a simple and efficient method to integrate with LapakGaming Reseller API using Laravel. It supports all major operations including product management, order creation, and balance checking.
@@ -28,12 +43,12 @@ After publishing, you will find the configuration file at `config/lapakgaming.ph
 
 ## Usage Examples
 
-### Get Categories
+## Get Categories
 ```php
 $categories = LapakGaming::getCategories();
 ```
 
-### Get Products
+## Get Products
 
 #### Get Products by Category
 ```php
@@ -59,12 +74,12 @@ $products = LapakGaming::getProductsByCode('VAL1650-S14', 'my');
 $products = LapakGaming::getProductsByCategoryAndCode('VAL', 'VAL1650-S14', 'id');
 ```
 
-### Get All Products
+## Get All Products
 ```php
 $allProducts = LapakGaming::getAllProducts();
 ```
 
-### Get Best Products
+## Get Best Products
 
 #### Get Best Products by Category
 ```php
@@ -90,12 +105,12 @@ $bestProducts = LapakGaming::getBestProductsByGroupCode('ML1288_166', 'my');
 $bestProducts = LapakGaming::getBestProductsByCategoryAndGroupCode('ML', 'ML1288_166', 'id');
 ```
 
-### Check Balance
+## Get Balance
 ```php
 $balance = LapakGaming::getBalance();
 ```
 
-### Create Order
+## Order
 
 #### Basic Order with Product Code
 ```php
@@ -239,7 +254,7 @@ Based on LapakGaming API documentation, here are all the parameters you can use 
 - **partner_reference_id**: Unique identifier to prevent duplicate orders
 - **override_callback_url**: Custom callback URL for this order
 
-### Check Order Status
+## Order Status
 
 #### Check Status by Transaction ID
 ```php
