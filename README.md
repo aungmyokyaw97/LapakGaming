@@ -33,9 +33,30 @@ After publishing, you will find the configuration file at `config/lapakgaming.ph
 $categories = LapakGaming::getCategories();
 ```
 
-### Get Products by Category
+### Get Products
+
+#### Get Products by Category
 ```php
-$products = LapakGaming::getProducts('mobile-legends');
+// Get all products in a category
+$products = LapakGaming::getProductsByCategory('VAL');
+
+// Get products in category for specific country
+$products = LapakGaming::getProductsByCategory('VAL', 'id');
+```
+
+#### Get Products by Product Code
+```php
+// Get products by product code
+$products = LapakGaming::getProductsByCode('VAL1650-S14');
+
+// Get products by code for specific country
+$products = LapakGaming::getProductsByCode('VAL1650-S14', 'my');
+```
+
+#### Get Products with Both Filters
+```php
+// Filter by both category and product code
+$products = LapakGaming::getProductsByCategoryAndCode('VAL', 'VAL1650-S14', 'id');
 ```
 
 ### Get All Products
@@ -97,18 +118,61 @@ $order = LapakGaming::setGroupProduct('mobile-legends')
 ```
 
 ### Check Order Status
+
+#### Check Status by Transaction ID
 ```php
-$status = LapakGaming::checkOrderStatus('TXN123456');
+// Check by transaction ID (tid)
+$status = LapakGaming::checkOrderStatusByTid('RA171341142175668140');
+```
+
+#### Check Status by Partner Reference ID
+```php
+// Check by partner reference ID
+$status = LapakGaming::checkOrderStatusByReferenceId('R123');
+```
+
+#### Check Status with Both Parameters
+```php
+// Check with both transaction ID and partner reference ID
+$status = LapakGaming::checkOrderStatusByTidAndReferenceId('RA171341142175668140', 'R123');
+```
+
+#### Check Status with Flexible Parameters
+```php
+// Check by transaction ID only
+$status = LapakGaming::checkOrderStatusBy('RA171341142175668140');
+
+// Check by partner reference ID only
+$status = LapakGaming::checkOrderStatusBy(null, 'R123');
+
+// Check by both
+$status = LapakGaming::checkOrderStatusBy('RA171341142175668140', 'R123');
 ```
 
 ### Get Best Products
+
+#### Get Best Products by Category
 ```php
-$bestProducts = LapakGaming::getBestProducts();
+// Get best products by category
+$bestProducts = LapakGaming::getBestProductsByCategory('ML');
+
+// Get best products by category for specific country
+$bestProducts = LapakGaming::getBestProductsByCategory('ML', 'id');
 ```
 
-### Get Best Products by Group
+#### Get Best Products by Group Product Code
 ```php
-$bestProducts = LapakGaming::getBestProductsByGroup('mobile-legends', 'id');
+// Get best products by group product code
+$bestProducts = LapakGaming::getBestProductsByGroupCode('ML1288_166');
+
+// Get best products by group code for specific country
+$bestProducts = LapakGaming::getBestProductsByGroupCode('ML1288_166', 'my');
+```
+
+#### Get Best Products with Both Filters
+```php
+// Filter by both category and group product code
+$bestProducts = LapakGaming::getBestProductsByCategoryAndGroupCode('ML', 'ML1288_166', 'id');
 ```
 
 ## Supported Country Codes
@@ -142,22 +206,6 @@ When using group products or country-specific operations, use these country code
 ### Default Values
 - **count_order**: Defaults to 1 if `setQuantity()` is not called
 - **country_code**: Only sent to API if explicitly set via `setCountryCode()` or `setGroupProduct()`
-
-## Error Handling
-
-The package includes comprehensive error handling for all LapakGaming API status codes:
-- SUCCESS
-- UNAUTHORIZED  
-- PRODUCT_NOT_FOUND
-- INSUFFICIENT_BALANCE
-- And more...
-
-## Testing
-
-For testing purposes, you can use the provided test product codes in development environment:
-- Success: `ML78_8-S2`
-- Price Not Match: `ML78_8-S2` with `price: 999999`
-- Product Not Found: `ASD`
 
 ## License
 

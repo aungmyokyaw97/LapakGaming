@@ -220,14 +220,80 @@ class LapakGaming
     }
 
     /**
-     * Get products by category.
+     * Get products by category code.
      *
-     * @param string $category
+     * @param string $categoryCode Category code (e.g., 'mobile-legends', 'VAL')
+     * @param string|null $countryCode Country code (e.g., 'id', 'my', 'ph') - optional
      * @return object
      */
-    public function getProducts(string $category)
+    public function getProductsByCategory(string $categoryCode, string $countryCode = null)
     {
-        return $this->makeApiCall('products', ['category' => $category]);
+        $data = ['category_code' => $categoryCode];
+        
+        if ($countryCode) {
+            $data['country_code'] = strtolower($countryCode);
+        }
+
+        return $this->makeApiCall('products', $data);
+    }
+
+    /**
+     * Get products by product code.
+     *
+     * @param string $productCode Product code (e.g., 'VAL1650-S14', 'ML78_8-S2')
+     * @param string|null $countryCode Country code (e.g., 'id', 'my', 'ph') - optional
+     * @return object
+     */
+    public function getProductsByCode(string $productCode, string $countryCode = null)
+    {
+        $data = ['product_code' => $productCode];
+        
+        // Only add country_code if explicitly provided
+        if ($countryCode) {
+            $data['country_code'] = strtolower($countryCode);
+        }
+
+        return $this->makeApiCall('products', $data);
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use getProductsByCode() instead
+     */
+    public function getProduct(string $productCode, string $countryCode = null)
+    {
+        return $this->getProductsByCode($productCode, $countryCode);
+    }
+
+    /**
+     * Get products with both category and product filters.
+     *
+     * @param string $categoryCode Category code
+     * @param string $productCode Product code
+     * @param string|null $countryCode Country code - optional
+     * @return object
+     */
+    public function getProductsByCategoryAndCode(string $categoryCode, string $productCode, string $countryCode = null)
+    {
+        $data = [
+            'category_code' => $categoryCode,
+            'product_code' => $productCode
+        ];
+        
+        if ($countryCode) {
+            $data['country_code'] = strtolower($countryCode);
+        }
+
+        return $this->makeApiCall('products', $data);
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use getProductsByCategory() instead
+     */
+    public function getProducts(string $categoryCode)
+    {
+        return $this->getProductsByCategory($categoryCode);
     }
 
     /**
@@ -295,57 +361,173 @@ class LapakGaming
     }
 
     /**
-     * Check order status.
+     * Check order status by transaction ID.
+     * API: https://dev.lapakgaming.com/api/order_status?tid=RA171341142175668140
      *
-     * @param string|null $transactionId
+     * @param string $transactionId Transaction ID (tid)
      * @return object
-     * @throws LapakGamingException
+     */
+    public function checkOrderStatusByTid(string $transactionId)
+    {
+        $data = ['tid' => $transactionId];
+        return $this->makeApiCall('check_order', $data);
+    }
+
+    /**
+     * Check order status by partner reference ID.
+     * API: https://dev.lapakgaming.com/api/order_status?partner_reference_id=R123
+     *
+     * @param string $partnerReferenceId Partner reference ID
+     * @return object
+     */
+    public function checkOrderStatusByReferenceId(string $partnerReferenceId)
+    {
+        $data = ['partner_reference_id' => $partnerReferenceId];
+        return $this->makeApiCall('check_order', $data);
+    }
+
+    /**
+     * Check order status with both transaction ID and partner reference ID.
+     * API: https://dev.lapakgaming.com/api/order_status?tid=RA171341142175668140&partner_reference_id=R123
+     *
+     * @param string $transactionId Transaction ID (tid)
+     * @param string $partnerReferenceId Partner reference ID
+     * @return object
+     */
+    public function checkOrderStatusByTidAndReferenceId(string $transactionId, string $partnerReferenceId)
+    {
+        $data = [
+            'tid' => $transactionId,
+            'partner_reference_id' => $partnerReferenceId
+        ];
+        return $this->makeApiCall('check_order', $data);
+    }
+
+    /**
+     * Check order status with flexible parameters.
+     * API: https://dev.lapakgaming.com/api/order_status?tid=RA171341142175668140&partner_reference_id=R123
+     *
+     * @param string|null $transactionId Transaction ID (tid) - optional
+     * @param string|null $partnerReferenceId Partner reference ID - optional
+     * @return object
+     * @throws LapakGamingException If neither parameter is provided
+     */
+    public function checkOrderStatusBy(string $transactionId = null, string $partnerReferenceId = null)
+    {
+        if (!$transactionId && !$partnerReferenceId) {
+            throw LapakGamingException::create('Either transaction ID (tid) or partner reference ID is required to check order status.');
+        }
+
+        $data = [];
+        
+        if ($transactionId) {
+            $data['tid'] = $transactionId;
+        }
+        
+        if ($partnerReferenceId) {
+            $data['partner_reference_id'] = $partnerReferenceId;
+        }
+
+        return $this->makeApiCall('check_order', $data);
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use checkOrderStatusByTid() instead
      */
     public function checkOrderStatus($transactionId = null)
     {
         $tid = $transactionId ?: $this->transactionId;
         
         if (!$tid) {
-            throw LapakGamingException::create('Transaction ID is required to check order status.');
+            throw LapakGamingException::create('Transaction ID is required. Use checkOrderStatusByTid() or checkOrderStatusBy() instead.');
         }
 
-        return $this->makeApiCall('check_order', ['transaction_id' => $tid]);
+        return $this->checkOrderStatusByTid($tid);
     }
 
     /**
-     * Get best products list.
+     * Get best products by category code.
+     * API: https://dev.lapakgaming.com/api/catalogue/group-products?category_code=ML&country_code=id
      *
+     * @param string $categoryCode Category code (e.g., 'ML', 'VAL') - required
+     * @param string|null $countryCode Country code (e.g., 'id', 'my', 'ph') - optional
      * @return object
+     */
+    public function getBestProductsByCategory(string $categoryCode, string $countryCode = null)
+    {
+        $data = ['category_code' => $categoryCode];
+        
+        // Only add country_code if explicitly provided
+        if ($countryCode) {
+            $data['country_code'] = strtolower($countryCode);
+        }
+
+        return $this->makeApiCall('best_products', $data);
+    }
+
+    /**
+     * Get best products by group product code.
+     * API: https://dev.lapakgaming.com/api/catalogue/group-products?group_product_code=ML1288_166&country_code=id
+     *
+     * @param string $groupProductCode Group product code (e.g., 'ML1288_166') - required
+     * @param string|null $countryCode Country code (e.g., 'id', 'my', 'ph') - optional
+     * @return object
+     */
+    public function getBestProductsByGroupCode(string $groupProductCode, string $countryCode = null)
+    {
+        $data = ['group_product_code' => $groupProductCode];
+        
+        // Only add country_code if explicitly provided
+        if ($countryCode) {
+            $data['country_code'] = strtolower($countryCode);
+        }
+
+        return $this->makeApiCall('best_products', $data);
+    }
+
+    /**
+     * Get best products with both category and group product filters.
+     * API: https://dev.lapakgaming.com/api/catalogue/group-products?category_code=ML&group_product_code=ML1288_166&country_code=id
+     *
+     * @param string $categoryCode Category code - required
+     * @param string $groupProductCode Group product code - required
+     * @param string|null $countryCode Country code - optional
+     * @return object
+     */
+    public function getBestProductsByCategoryAndGroupCode(string $categoryCode, string $groupProductCode, string $countryCode = null)
+    {
+        $data = [
+            'category_code' => $categoryCode,
+            'group_product_code' => $groupProductCode
+        ];
+        
+        // Only add country_code if explicitly provided
+        if ($countryCode) {
+            $data['country_code'] = strtolower($countryCode);
+        }
+
+        return $this->makeApiCall('best_products', $data);
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use getBestProductsByCategory() instead
      */
     public function getBestProducts()
     {
-        return $this->makeApiCall('best_products');
+        throw LapakGamingException::create('getBestProducts() requires parameters. Use getBestProductsByCategory() or getBestProductsByGroupCode() instead.');
     }
 
     /**
-     * Get best products by group product.
-     *
-     * @param string|null $groupProduct
-     * @param string|null $countryCode
-     * @return object
-     * @throws LapakGamingException
+     * Legacy method for backward compatibility.
+     * @deprecated Use getBestProductsByGroupCode() instead
      */
     public function getBestProductsByGroup($groupProduct = null, $countryCode = null)
     {
-        $group = $groupProduct ?: $this->groupProduct;
-        $country = $countryCode ?: $this->countryCode;
-        
-        if (!$group) {
-            throw LapakGamingException::create('Group product is required.');
+        if (!$groupProduct) {
+            throw LapakGamingException::create('Group product code is required. Use getBestProductsByGroupCode() instead.');
         }
-
-        $data = ['group_product' => $group];
-        
-        // Only add country_code if it's been set
-        if ($country) {
-            $data['country_code'] = strtolower($country);
-        }
-
-        return $this->makeApiCall('best_products_by_group', $data);
+        return $this->getBestProductsByGroupCode($groupProduct, $countryCode);
     }
 }

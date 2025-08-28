@@ -26,14 +26,14 @@ return [
     ],
     
     'api_paths' => [
-        'categories' => '/api/get-categories',
-        'products' => '/api/get-products',
-        'all_products' => '/api/get-all-products', 
-        'balance' => '/api/get-balance',
-        'create_order' => '/api/create-order',
-        'check_order' => '/api/check-order-status',
-        'best_products' => '/api/get-best-products',
-        'best_products_by_group' => '/api/get-best-products-by-group',
+        'categories' => '/api/category',
+        'products' => '/api/product',
+        'all_products' => '/api/all-products', 
+        'balance' => '/api/balance',
+        'create_order' => '/api/order',
+        'check_order' => '/api/order_status',
+        'best_products' => '/api/catalogue/group-products',
+        'best_products_by_group' => '/api/catalogue/group-products',
     ],
     
     /*

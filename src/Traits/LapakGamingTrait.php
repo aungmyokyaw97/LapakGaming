@@ -13,12 +13,13 @@ trait LapakGamingTrait
      * @param string $endpoint
      * @param array $data
      * @param string $method
+     * @param array $urlParams Parameters to replace in URL (e.g., :group_product_code)
      * @return object
      * @throws LapakGamingException
      */
-    protected function makeApiCall(string $endpoint, array $data = [], string $method = 'GET')
+    protected function makeApiCall(string $endpoint, array $data = [], string $method = 'GET', array $urlParams = [])
     {
-        $url = $this->buildUrl($endpoint);
+        $url = $this->buildUrl($endpoint, $urlParams);
         $headers = $this->buildHeaders();
         
         try {
@@ -33,11 +34,18 @@ trait LapakGamingTrait
      * Build full API URL.
      *
      * @param string $endpoint
+     * @param array $urlParams Parameters to replace in URL (e.g., :group_product_code)
      * @return string
      */
-    private function buildUrl(string $endpoint): string
+    private function buildUrl(string $endpoint, array $urlParams = []): string
     {
         $path = $this->config['api_paths'][$endpoint] ?? '';
+        
+        // Replace URL parameters (e.g., :group_product_code with actual value)
+        foreach ($urlParams as $key => $value) {
+            $path = str_replace(':' . $key, $value, $path);
+        }
+        
         return rtrim($this->baseUrl, '/') . $path;
     }
 
