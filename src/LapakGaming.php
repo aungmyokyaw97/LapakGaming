@@ -380,7 +380,7 @@ class LapakGaming
      * @param string $partnerReferenceId Partner reference ID
      * @return object
      */
-    public function checkOrderStatusByReferenceId(string $partnerReferenceId)
+    public function checkOrderStatusByRefId(string $partnerReferenceId)
     {
         $data = ['partner_reference_id' => $partnerReferenceId];
         return $this->makeApiCall('check_order', $data);
@@ -394,13 +394,31 @@ class LapakGaming
      * @param string $partnerReferenceId Partner reference ID
      * @return object
      */
-    public function checkOrderStatusByTidAndReferenceId(string $transactionId, string $partnerReferenceId)
+    public function checkOrderStatusByTidAndRefId(string $transactionId, string $partnerReferenceId)
     {
         $data = [
             'tid' => $transactionId,
             'partner_reference_id' => $partnerReferenceId
         ];
         return $this->makeApiCall('check_order', $data);
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use checkOrderStatusByRefId() instead
+     */
+    public function checkOrderStatusByReferenceId(string $partnerReferenceId)
+    {
+        return $this->checkOrderStatusByRefId($partnerReferenceId);
+    }
+
+    /**
+     * Legacy method for backward compatibility.
+     * @deprecated Use checkOrderStatusByTidAndRefId() instead
+     */
+    public function checkOrderStatusByTidAndReferenceId(string $transactionId, string $partnerReferenceId)
+    {
+        return $this->checkOrderStatusByTidAndRefId($transactionId, $partnerReferenceId);
     }
 
     /**

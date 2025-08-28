@@ -128,13 +128,13 @@ $status = LapakGaming::checkOrderStatusByTid('RA171341142175668140');
 #### Check Status by Partner Reference ID
 ```php
 // Check by partner reference ID
-$status = LapakGaming::checkOrderStatusByReferenceId('R123');
+$status = LapakGaming::checkOrderStatusByRefId('R123');
 ```
 
 #### Check Status with Both Parameters
 ```php
 // Check with both transaction ID and partner reference ID
-$status = LapakGaming::checkOrderStatusByTidAndReferenceId('RA171341142175668140', 'R123');
+$status = LapakGaming::checkOrderStatusByTidAndRefId('RA171341142175668140', 'R123');
 ```
 
 #### Check Status with Flexible Parameters
